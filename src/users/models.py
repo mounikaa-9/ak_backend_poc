@@ -14,7 +14,7 @@ class Farm(models.Model):
     farm_id -> unique id in the database
     field_id -> unique id given by the farmanout's api
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='farms')
+    user = models.ForeignKey(User, unique = True, on_delete=models.CASCADE, related_name='farms')
     farm_email = models.EmailField()
     farm_coordinates = models.JSONField()
     field_id = models.CharField(max_length=50, unique=True)

@@ -37,6 +37,18 @@ def create_user(request, payload: CreateUser):
 def create_new_farm(request, payload: FarmCreateSchema):
     """Create a new farm"""
     try:
+        farm = Farm.objects.get(user=request.user)
+        if farm:
+            return FarmResponseSchema(
+                field_id=farm.field_id,
+                farm_email=farm.farm_email,
+                field_name=farm.field_name,
+                field_area=float(farm.field_area),
+                crop=farm.crop,
+                sowing_date=farm.sowing_date,
+                last_sensed_day=farm.last_sensed_day,
+                farm_coordinates=farm.farm_coordinates,
+            )
         logger.info(f"Starting farm creation for user: {request.user.username}")
         logger.info(f"Payload: {payload.dict()}")
         
