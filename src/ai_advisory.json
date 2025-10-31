@@ -1,0 +1,221 @@
+{
+    "Crop": "rice",
+    "SARDay": "20251019",
+    "Satellite_Data": {
+        "green": "82.60%",
+        "orange": "0.00%",
+        "purple": "14.02%",
+        "red": "3.37%",
+        "white": "0.00%"
+    },
+    "SensedDay": "20251029",
+    "SowingDate": "20251001",
+    "advisory": {
+        "Explanation of calculated parameters": {
+            "Fertilizers": "1. Nitrogen (N) ideal range = [9.1, 22.8] kg/acre. Predicted actual N is 9.1 kg/acre. Nutrient gap is 11.4 kg/acre (mid-point 17.0 kg/acre - 9.1 kg/acre). Chemical rate for Urea (46% N) is 11.4 kg/acre \u00f7 0.46 = 24.1 kg/acre. Organic rate for Farmyard Manure (FYM) (2.3% N) is 11.4 kg/acre \u00f7 0.023 = 495.7 kg/acre. Criticality is moderate. The current NDVI of 0.52 is above the typical range for healthy transplanted rice (0.25-0.45), suggesting good initial establishment or potential early weed presence. This higher NDVI was considered in estimating the current soil N, indicating a baseline level. The recommendation aims to support tillering and vegetative growth. Urea is highly soluble and can be broadcast into floodwater. FYM should be incorporated before or at transplanting, or top-dressed carefully. Application of Urea can temporarily increase soil pH due to hydrolysis, but this is usually buffered in flooded rice systems. \n2. Phosphorus (P) ideal range = [13.7, 27.3] kg/acre. Predicted actual P is 9.1 kg/acre. Nutrient gap is 10.0 kg/acre (mid-point 20.5 kg/acre - 9.1 kg/acre). Chemical rate for Diammonium Phosphate (DAP) (46% P2O5, ~20% P) is 10.0 kg/acre \u00f7 0.20 = 50.0 kg/acre. Organic rate for Farmyard Manure (FYM) (0.5% P) is 10.0 kg/acre \u00f7 0.005 = 2000.0 kg/acre. Criticality is moderate. The current NDVI suggests good initial vigor, but P is crucial for root development and tillering. The estimated soil P level is below the ideal mid-point, necessitating supplementation. DAP is moderately soluble and can be broadcast into floodwater. FYM provides slow-release P. DAP application can slightly lower soil pH due to its acidic nature. \n3. Potassium (K) ideal range = [91.0, 182.0] kg/acre. Predicted actual K is 91.0 kg/acre. Nutrient gap is 0.0 kg/acre (mid-point 136.5 kg/acre - 91.0 kg/acre). No chemical or organic recommendation is made as the predicted actual K is at the ideal minimum. Criticality is low. \n4. Sulfur (S) ideal range = [9.1, 18.2] kg/acre. Predicted actual S is 9.1 kg/acre. Nutrient gap is 0.0 kg/acre (mid-point 13.7 kg/acre - 9.1 kg/acre). No chemical or organic recommendation is made as the predicted actual S is at the ideal minimum. Criticality is low. \n5. Zinc (Zn) ideal range = [0.9, 1.8] kg/acre. Predicted actual Zn is 0.91 kg/acre. Nutrient gap is 0.0 kg/acre (mid-point 1.35 kg/acre - 0.91 kg/acre). No chemical or organic recommendation is made as the predicted actual Zn is at the ideal minimum. Criticality is low. \n\nFor N and P, chemical fertilizers (Urea, DAP) can be broadcast into the floodwater. Organic FYM should be incorporated or top-dressed. The application frequency is 1 day, meaning the recommended amounts should be applied once within the advisory period. Urea and DAP are highly to moderately soluble. FYM is slow-release. Application of Urea can temporarily increase pH, while DAP can slightly decrease it. Sparse vegetation or very young crops can lead to higher NDVI values due to background soil reflectance or early weed growth, impacting the accuracy of satellite-derived nutrient advisories. SAVI is used instead of NDVI for sparse vegetation to minimize soil background effects.",
+            "Growth and Yield Estimation": "The current estimated yield of 2050 kg/acre is within the local potential yield range. The NDVI of 0.52 is higher than the typical range for the transplanting stage (0.25-0.45), which could indicate vigorous early growth. However, the high probability of weeds (Echinochloa crus-galli, Cyperus difformis) and moderate nutrient deficiencies (P, K, S, Zn) are significant limiting factors. These factors are expected to reduce the final yield from the maximum local potential, despite the initial high NDVI reading. The NDWI indicates adequate moisture, which is favorable. Based on the sowing date (20251001) and an expected maturity period of 4 months, the harvest is projected for February 2026. The current high NDVI (0.52) indicates active growth, consistent with early crop development and the local harvest window.",
+            "Irrigation": "The rice crop is in the Transplanting stage, requiring consistent shallow water levels to establish seedlings and promote tillering. Daily reference evapotranspiration was estimated at approximately 4 mm, assuming moderate temperatures and no rainfall. The typical baseline recommendation for rice at this stage is around 3-5 mm. The current phenological stage and moderate evapotranspiration influenced the recommended quantity. Irrigation is advised every two days to maintain optimal moisture, with 4 events scheduled. No skips occurred due to rainfall or other weather conditions.",
+            "Pest & Disease": "The observed NDVI (0.52) is above the typical range (0.25-0.45) for rice at the transplanting stage, suggesting vigorous early growth or, more likely, significant weed competition. The NDWI (0.42) indicates adequate soil moisture, which supports both crop and weed growth. Kodumur's tropical climate during October-November typically brings high humidity and moderate temperatures, favoring early pest and disease development. Stem borer and Blast are common threats during early rice stages in this region. While no direct stress is visible from indices for pests/diseases, the elevated NDVI warrants close monitoring for early infestations, especially given the crop's susceptibility at this stage.",
+            "Soil Management": "Soil pH is predicted at 6.8, which is slightly acidic to neutral, ideal for rice cultivation. Salinity is predicted as low. Flood irrigation can help in maintaining a stable pH by leaching salts and buffering the soil. Previous fertilizer applications, if not managed properly, could have altered pH; for instance, repeated use of ammonium-based fertilizers can acidify the soil, while liming agents increase it. However, without previous advisory adherence data, current predictions are based on typical conditions for flooded rice. Current 0.11% is critically low. Improves soil health, nutrient cycling, water retention, and yield. Increase with organic amendments.",
+            "Weed": "The elevated NDVI (0.52) significantly above the expected range (0.25-0.45) for rice at the transplanting stage strongly suggests the presence of substantial weed biomass. At this early stage, rice canopy coverage is typically sparse, making it highly vulnerable to weed competition. The adequate NDWI (0.42) indicates sufficient water, which, combined with the tropical climate, creates ideal conditions for rapid weed germination and growth. Common rice weeds like Echinochloa crus-galli and Cyperus difformis thrive in flooded or moist conditions and can quickly outcompete young rice seedlings, leading to poor stand establishment and yield reduction. Early intervention is critical."
+        },
+        "Fertilizer": {
+            "K": {
+                "application_rate": 0.0,
+                "application_rate_organic": 0.0,
+                "critical": "low",
+                "current_soil_composition_kpa": 91.0,
+                "current_soil_composition_ppm": 100.0,
+                "ideal_soil_composition_kpa": "91.0-182.0",
+                "organic_source": "Farmyard Manure (FYM)",
+                "source_of_K": "Muriate of Potash (MOP)"
+            },
+            "N": {
+                "application_rate": 24.1,
+                "application_rate_organic": 482.0,
+                "critical": "moderate",
+                "current_soil_composition_kpa": 9.1,
+                "current_soil_composition_ppm": 10.0,
+                "ideal_soil_composition_kpa": "9.1-22.8",
+                "organic_source": "Farmyard Manure (FYM)",
+                "source_of_N": "Urea"
+            },
+            "P": {
+                "application_rate": 10.0,
+                "application_rate_organic": 200.0,
+                "critical": "moderate",
+                "current_soil_composition_kpa": 9.1,
+                "current_soil_composition_ppm": 10.0,
+                "ideal_soil_composition_kpa": "13.7-27.3",
+                "organic_source": "Farmyard Manure (FYM)",
+                "source_of_P": "Diammonium Phosphate (DAP)"
+            },
+            "S": {
+                "application_rate": 0.0,
+                "application_rate_organic": 0.0,
+                "critical": "low",
+                "current_soil_composition_kpa": 9.1,
+                "current_soil_composition_ppm": 10.0,
+                "ideal_soil_composition_kpa": "9.1-18.2",
+                "organic_source": "Farmyard Manure (FYM)",
+                "source_of_S": "Gypsum"
+            },
+            "Zn": {
+                "application_rate": 0.0,
+                "application_rate_organic": 0.0,
+                "critical": "low",
+                "current_soil_composition_kpa": 0.91,
+                "current_soil_composition_ppm": 1.0,
+                "ideal_soil_composition_kpa": "0.9-1.8",
+                "organic_source": "Farmyard Manure (FYM)",
+                "source_of_Zn": "Zinc Sulphate"
+            },
+            "application_rate_units": "kg/acre",
+            "frequency_of_application": 1,
+            "frequency_of_application_units": "days"
+        },
+        "Growth and Yield Estimation": {
+            "expected_harvesting_period": "February 2026",
+            "expected_yield_per_acre": "2050",
+            "expected_yield_per_acre_units": "kg/acre",
+            "harvest_status": "incomplete",
+            "potential_yield": {
+                "expected_local_maximum_yield": 2500,
+                "expected_local_minimum_yield": 1800,
+                "expected_yield_units": "kg/acre"
+            }
+        },
+        "Irrigation": {
+            "20251030": {
+                "evapotranspiration": "moderate",
+                "probability_of_precipitation": "0",
+                "quantity": "4",
+                "rain": "0",
+                "time_range": "06:00-09:00"
+            },
+            "20251031": {
+                "evapotranspiration": "moderate",
+                "probability_of_precipitation": "0",
+                "quantity": "0",
+                "rain": "0",
+                "time_range": "06:00-09:00"
+            },
+            "20251101": {
+                "evapotranspiration": "moderate",
+                "probability_of_precipitation": "0",
+                "quantity": "4",
+                "rain": "0",
+                "time_range": "06:00-09:00"
+            },
+            "20251102": {
+                "evapotranspiration": "moderate",
+                "probability_of_precipitation": "0",
+                "quantity": "0",
+                "rain": "0",
+                "time_range": "06:00-09:00"
+            },
+            "20251103": {
+                "evapotranspiration": "moderate",
+                "probability_of_precipitation": "0",
+                "quantity": "4",
+                "rain": "0",
+                "time_range": "06:00-09:00"
+            },
+            "20251104": {
+                "evapotranspiration": "moderate",
+                "probability_of_precipitation": "0",
+                "quantity": "0",
+                "rain": "0",
+                "time_range": "06:00-09:00"
+            },
+            "20251105": {
+                "evapotranspiration": "moderate",
+                "probability_of_precipitation": "0",
+                "quantity": "4",
+                "rain": "0",
+                "time_range": "06:00-09:00"
+            },
+            "comment": "",
+            "methods": "Flood",
+            "quantity_units": "mm"
+        },
+        "Pest and Disease": {
+            "potential_diseases": [
+                {
+                    "disease_name": "Blast",
+                    "probability": "moderate",
+                    "solution": {
+                        "chemical": "Tricyclazole spray",
+                        "organic": "Trichoderma viride"
+                    }
+                },
+                {
+                    "disease_name": "Bacterial leaf blight",
+                    "probability": "low",
+                    "solution": {
+                        "chemical": "Copper oxychloride",
+                        "organic": "Streptomycin sulfate"
+                    }
+                }
+            ],
+            "potential_pests": [
+                {
+                    "pest_name": "Stem borer",
+                    "probability": "moderate",
+                    "solution": {
+                        "chemical": "Chlorantraniliprole",
+                        "organic": "Neem oil spray"
+                    }
+                },
+                {
+                    "pest_name": "Leaf folder",
+                    "probability": "low",
+                    "solution": {
+                        "chemical": "Cartap hydrochloride",
+                        "organic": "Bacillus thuringiensis"
+                    }
+                }
+            ]
+        },
+        "References": {
+            "Fertilizer": "Typical nutrient content for Urea (46% N), DAP (18% N, 46% P2O5), FYM (0.5-1.5% N, 0.2-0.5% P, 0.5-1.5% K, 0.1-0.2% S, 0.002-0.005% Zn) are standard agronomic values. Max single application doses for Urea (50 kg/acre) and DAP (25 kg/acre) are based on common rice cultivation practices to avoid toxicity. Organic mineralization rate (20%) is an agronomic estimate for warm, moist conditions.",
+            "Growth and Yield Estimation": "Agronomic principles for rice cultivation, impact of nutrient deficiencies, weed competition, and remote sensing indices (NDVI, NDWI) on yield.",
+            "Irrigation": "ET\u2080 estimated using Hargreaves-style approximation due to missing weather data. Kc for rice at transplanting stage referenced from FAO-56 guidelines. Irrigation frequency adjusted based on NDWI and crop stage requirements.",
+            "Pest & Disease": "Rice phenology and typical NDVI ranges for tropical climates. Common pest and disease cycles in Indian rice cultivation. General susceptibility of rice at transplanting stage.",
+            "Soil Management": "Soil pH and salinity predictions are based on typical values for irrigated rice fields in tropical regions, considering the buffering capacity of flooded soils and common agricultural practices in Kodumur, India. 1.  Food and Agriculture Organization of the United Nations (FAO). (2001). Soil Organic Matter Management for Sustainable Agriculture. FAO Soils Bulletin 80. Rome, Italy. \n2.  International Rice Research Institute (IRRI). (2013). Rice Production Course: Soil Fertility and Nutrient Management. Los Ba\u00f1os, Philippines. \n3.  Lal, R. (2004). Soil carbon sequestration impacts on global climate change and food security. Science, 304(5677), 1623-1627.",
+            "Weed": "Typical weed species in Indian rice paddies. Impact of water availability on weed germination and growth. NDVI interpretation for early-stage crop vs. weed biomass."
+        },
+        "Soil Management": {
+            "SOC": "0.11",
+            "pH": 6.8,
+            "salinity": "low"
+        },
+        "Weed": {
+            "potential_weeds": [
+                {
+                    "probability": "high",
+                    "solution": {
+                        "chemical": "Pretilachlor application",
+                        "organic": "Manual weeding"
+                    },
+                    "weed_name": "Echinochloa crus-galli"
+                },
+                {
+                    "probability": "high",
+                    "solution": {
+                        "chemical": "Bensulfuron-methyl",
+                        "organic": "Water management"
+                    },
+                    "weed_name": "Cyperus difformis"
+                }
+            ]
+        }
+    },
+    "advisory_generated": "successful",
+    "advisory_type": "weekly",
+    "fieldArea": "2.659 acres",
+    "fieldID": "1761808284616",
+    "fieldName": "testing_field_1_suser",
+    "lastSatelliteVisit": "29 October 2025",
+    "timestamp": "1761823365446"
+}

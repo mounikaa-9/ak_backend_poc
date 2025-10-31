@@ -1,0 +1,31 @@
+{
+  "ndvi": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/ndvi.png",
+  "ndwi": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/ndwi.png",
+  "evapo": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/evapo.png",
+  "ndmi": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/ndmi.png",
+  "evi": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/evi.png",
+  "rvi": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/rvi.png",
+  "rsm": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/rsm.png",
+  "ndre": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/ndre.png",
+  "vari": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/vari.png",
+  "savi": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/savi.png",
+  "avi": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/avi.png",
+  "bsi": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/bsi.png",
+  "si": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/si.png",
+  "soc": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/soc.png",
+  "tci": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/tci.png",
+  "etci": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/etci.png",
+  "hybrid": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/hybrid.png",
+  "hybrid_blind": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/hybrid_blind.png",
+  "dem": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/dem.png",
+  "lulc": "https://aikyampoc.blob.core.windows.net/farm-images/1761808284616/20251029/lulc.png",
+  "_meta": {
+    "field_id": "1761808284616",
+    "sensed_day": "20251029",
+    "timestamp": "2025-10-30T13:15:31.202840",
+    "total_images": 20,
+    "successful_uploads": 20,
+    "failed_uploads": 0,
+    "container_name": "farm-images"
+  }
+}

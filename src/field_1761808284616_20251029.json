@@ -1,0 +1,27 @@
+{
+    "ndvi": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fndvi?generation=1761808365083318&alt=media",
+    "ndwi": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fndwi?generation=1761808365614048&alt=media",
+    "evapo": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fevapo?generation=1761808366420520&alt=media",
+    "ndmi": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fndmi?generation=1761808366291011&alt=media",
+    "evi": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fevi?generation=1761808365210031&alt=media",
+    "rvi": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Frvi?generation=1761808365347520&alt=media",
+    "rsm": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Frsm?generation=1761808365470717&alt=media",
+    "ndre": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fndre?generation=1761808365752000&alt=media",
+    "vari": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fvari?generation=1761808365901463&alt=media",
+    "savi": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fsavi?generation=1761808366156564&alt=media",
+    "avi": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Favi?generation=1761808366546946&alt=media",
+    "bsi": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fbsi?generation=1761808366677042&alt=media",
+    "si": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fsi?generation=1761808366799294&alt=media",
+    "soc": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fsoc?generation=1761808366031141&alt=media",
+    "tci": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Ftci?generation=1761808364819421&alt=media",
+    "etci": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fetci?generation=1761808364949568&alt=media",
+    "hybrid": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fhybrid?generation=1761808357869176&alt=media",
+    "hybrid_blind": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fhybrid_blind?generation=1761808367069513&alt=media",
+    "dem": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Fdem?generation=1761808366931668&alt=media",
+    "lulc": "https://storage.googleapis.com/download/storage/v1/b/farmbase-b2f7e.appspot.com/o/PaidMonitoredFields%2FZenSMz1cGNcgqIkidOUuaabzMYN2%2F1761808284616%2F20251029%2Flulc?generation=1761808367358387&alt=media",
+    "_meta": {
+        "field_id": "1761808284616",
+        "sensed_day": "20251029",
+        "timestamp": "2025-10-30T13:15:31.202840"
+    }
+}

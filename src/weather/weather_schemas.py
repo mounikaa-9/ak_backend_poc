@@ -1,0 +1,34 @@
+from ninja import Schema
+
+class WeatherPredictionSchema(Schema):
+    date: str
+    is_current: bool
+    summary: str
+    description: str
+    main: str
+    icon: str
+    temp_day: float
+    temp_min: float
+    temp_max: float
+    temp_morn: float
+    temp_eve: float
+    temp_night: float
+    feels_like_day: float
+    feels_like_morn: float
+    feels_like_eve: float
+    feels_like_night: float
+    humidity: float
+    pressure: float
+    dew_point: float
+    uvi: float
+    wind_speed: float
+    wind_deg: float
+    wind_gust: float
+    clouds: float
+    pop: float
+    rain: float
+    sunrise: float
+    sunset: float
+    moonrise: float
+    moonset: float
+    moon_phase: float

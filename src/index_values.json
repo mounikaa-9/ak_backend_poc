@@ -1,0 +1,18 @@
+{
+    "api": "get_index_values",
+    "rvi": "52",
+    "ndvi": "10",
+    "savi": "10",
+    "evi": "10",
+    "ndre": "10",
+    "rsm": "62",
+    "ndwi": "60",
+    "ndmi": "60",
+    "evapo": -1,
+    "soc": "0.11",
+    "etci": -1,
+    "_meta": {
+        "field_id": "1761808284616",
+        "sensed_day": "20251029"
+    }
+}
