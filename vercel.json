@@ -20,5 +20,6 @@
       "src": "/(.*)",
       "dest": "vercel_app.py"
     }
-  ]
+  ],
+  "buildCommand": "bash build_files.sh"
 }
