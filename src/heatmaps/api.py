@@ -21,7 +21,8 @@ from heatmaps.heatmap_schemas import (
 )
 from heatmaps.time_series_schemas import (
     IndexTimeSeriesResponseSchema, 
-    IndexValueDateSchema
+    IndexValueDateSchema,
+    IndexValueDateResponseSchema
 )
 
 heatmaps_router = Router(tags = ["heatmaps", "statellite-specific-time-series"])
@@ -176,7 +177,7 @@ def get_past_satellite_data(request, farm_id : str, index_type : str):
     
 @heatmaps_router.get(
     path="/get_one_past_satellite_value",
-    response=IndexTimeSeriesResponseSchema
+    response=IndexValueDateResponseSchema
 )
 def get_past_satellite_data_for_one_day(request, farm_id : str, index_type : str, date : str):
     """Return satellite index values (with dates) for the last 30 days"""

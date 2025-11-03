@@ -23,6 +23,11 @@ class IndexTimeSeriesRequestSchema(Schema):
 class IndexValueDateSchema(Schema):
     date: date
     value: Optional[Decimal]
+    
+class IndexValueDateResponseSchema(Schema):
+    date : date
+    value : Optional[Decimal]
+    index_type : str
 
 class IndexTimeSeriesResponseSchema(Schema):
     """Time series data grouped by index type"""
