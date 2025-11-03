@@ -12,7 +12,7 @@ from ninja_jwt.authentication import JWTAuth
 
 import asyncio
 import traceback
-from asgiref.sync import sync_to_async
+from asgiref.sync import sync_to_async, async_to_sync
 
 from utils.az_upload import upload_field_images_to_azure
 from integrations.get_sensed_days import get_sensed_days
@@ -51,7 +51,7 @@ async def process_heatmaps(field_id: str, sensed_day: str):
         url_files = await get_all_images(field_id=field_id, sensed_day=sensed_day)
         results = upload_field_images_to_azure(field_data=url_files)
         # Wrap synchronous function in sync_to_async
-        await sync_to_async(save_heatmaps_from_response)(field_data=results)
+        await sync_to_async(save_heatmaps_from_response, thread_sensitive=False)(field_data=results)
         logger.info(f"Heatmaps uploaded and saved for {field_id}")
     except Exception as e:
         logger.error(f"Image upload or heatmap save failed for {field_id}: {e}")
@@ -63,7 +63,7 @@ async def process_index_values(field_id: str, sensed_day: str):
     try:
         index_values = await get_index_values(field_id=field_id, sensed_day=sensed_day)
         # Wrap synchronous function in sync_to_async
-        await sync_to_async(save_index_values_from_response)(field_data=index_values)
+        await sync_to_async(save_index_values_from_response, thread_sensitive=False)(field_data=index_values)
         logger.info(f"Index values saved for {field_id}: {index_values}")
         return index_values
     except Exception as e:
@@ -77,7 +77,7 @@ async def process_ai_advisory(field_id: str, crop: str):
     try:
         ai_response = await get_ai_advisory(field_id=field_id, crop=crop)
         # Wrap synchronous function in sync_to_async
-        await sync_to_async(save_ai_adviosry_from_response)(api_response=ai_response, field_id=field_id)
+        await sync_to_async(save_ai_adviosry_from_response, thread_sensitive=False)(api_response=ai_response, field_id=field_id)
         logger.info(f"AI advisory saved for {field_id}")
         return ai_response
     except Exception as e:
@@ -92,7 +92,7 @@ async def process_weather(field_id: str):
         weather_response = await weather_forecast(field_id=field_id)
         weather_response = weather_response.get("weather", {})
         # Wrap synchronous function in sync_to_async
-        await sync_to_async(save_weather_from_response)(weather_response)
+        await sync_to_async(save_weather_from_response, thread_sensitive=False)(weather_response)
         logger.info(f"Weather data saved for {field_id}")
         return weather_response
     except Exception as e:
@@ -275,9 +275,9 @@ async def update_all_data(farm: Farm, field_id: str, crop: str, new_sensed_day: 
     weather_response = results[3] if not isinstance(results[3], Exception) else {}
     
     # Create analytics based on the results - wrap in sync_to_async
-    await sync_to_async(create_flood_analytics)(farm, weather_response, field_id, last_day_sensed_dt)
-    await sync_to_async(create_drought_analytics)(farm, index_values, field_id, last_day_sensed_dt)
-    await sync_to_async(create_pest_analytics)(farm, ai_response, field_id, last_day_sensed_dt)
+    await sync_to_async(create_flood_analytics, thread_sensitive=False)(farm, weather_response, field_id, last_day_sensed_dt)
+    await sync_to_async(create_drought_analytics, thread_sensitive=False)(farm, index_values, field_id, last_day_sensed_dt)
+    await sync_to_async(create_pest_analytics, thread_sensitive=False)(farm, ai_response, field_id, last_day_sensed_dt)
     
     return new_sensed_day
 
@@ -288,25 +288,25 @@ async def update_weather_only(field_id: str):
     await process_weather(field_id)
 
 
-@creation_router.post("/create_entire_profile", auth=JWTAuth())
-def reload_logic(request, payload: FarmResponseSchema):
+async def async_reload_logic(request, payload: FarmResponseSchema):
+    """Async version of reload logic"""
     user = request.user
     field_id = str(payload.field_id)
     crop = payload.crop
     logger.info(f"Starting profile creation for field_id={field_id}, user={user.username}, crop={crop}")
 
-    # Get the farm object (sync)
+    # Get the farm object (wrapped in sync_to_async)
     try:
-        farm = Farm.objects.get(user=request.user, field_id=field_id)
+        farm = await sync_to_async(Farm.objects.get, thread_sensitive=False)(user=request.user, field_id=field_id)
         logger.info(f"Farm found for user={user.username}, field_id={field_id}")
     except Farm.DoesNotExist:
         logger.error(f"Farm not found for user={user.username}, field_id={field_id}")
         raise HttpError(404, "Farm Not Found")
 
-    # Get current and new sensed days (sync)
+    # Get current and new sensed days
     current_sensed_day = farm.last_sensed_day
     try:
-        response_ = asyncio.run(get_sensed_days(field_id=field_id))
+        response_ = await get_sensed_days(field_id=field_id)
         new_sensed_day = response_["last_sensed_day"]
         if new_sensed_day is None:
             raise ValueError("No sensed day found yet")
@@ -324,7 +324,7 @@ def reload_logic(request, payload: FarmResponseSchema):
         # Update farm with new sensed day
         try:
             farm.last_sensed_day = new_sensed_day
-            farm.save()
+            await sync_to_async(farm.save, thread_sensitive=False)()
             logger.info(f"Farm updated with last_sensed_day={new_sensed_day} for {field_id}")
         except Exception as e:
             logger.error(f"Failed to update farm {field_id}: {e}")
@@ -333,9 +333,7 @@ def reload_logic(request, payload: FarmResponseSchema):
         
         # Full update with all data
         try:
-            final_sensed_day = asyncio.run(
-                update_all_data(farm, field_id, crop, new_sensed_day)
-            )
+            final_sensed_day = await update_all_data(farm, field_id, crop, new_sensed_day)
         except Exception as e:
             logger.error(f"Full update failed for {field_id}: {e}")
             traceback.print_exc()
@@ -351,7 +349,7 @@ def reload_logic(request, payload: FarmResponseSchema):
     else:
         # Only update weather
         try:
-            asyncio.run(update_weather_only(field_id))
+            await update_weather_only(field_id)
         except Exception as e:
             logger.error(f"Weather update failed for {field_id}: {e}")
             traceback.print_exc()
@@ -364,3 +362,9 @@ def reload_logic(request, payload: FarmResponseSchema):
             "last_sensed_day": str(current_sensed_day),
             "update_type": "weather_only"
         }
+
+
+@creation_router.post("/create_entire_profile", auth=JWTAuth())
+def reload_logic(request, payload: FarmResponseSchema):
+    """Synchronous wrapper that calls the async logic"""
+    return async_to_sync(async_reload_logic)(request, payload)
