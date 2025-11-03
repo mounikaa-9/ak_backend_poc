@@ -96,47 +96,6 @@ async def process_weather(field_id: str):
         return {}
 
 
-# def create_flood_analytics(farm: Farm, weather_response: dict, field_id: str):
-#     """Create flood analytics if conditions are met"""
-#     try:
-#         if (
-#             weather_response
-#             and "daily" in weather_response
-#             and len(weather_response["daily"]) > 0
-#             and float(weather_response["daily"][0].get("rain", -1)) > 75
-#         ):
-#             time_delta = timedelta(days=3)
-#             CropLossAnalytics.objects.create(
-#                 farm=farm,
-#                 kind="flood",
-#                 date_start=datetime.now(),
-#                 date_current=datetime.now(),
-#                 date_end=datetime.now() + time_delta
-#             )
-#             logger.info(f"Flood analytics created for {field_id}")
-#     except Exception as e:
-#         logger.error(f"Flood loss analytics failed for {field_id}: {e}")
-#         traceback.print_exc()
-
-
-# def create_drought_analytics(farm: Farm, index_values: dict, field_id: str):
-#     """Create drought analytics if conditions are met"""
-#     try:
-#         if float(index_values.get("ndmi", -1)) != -1 and float(index_values["ndmi"]) < 30:
-#             time_delta = timedelta(days=30)
-#             CropLossAnalytics.objects.create(
-#                 farm=farm,
-#                 kind="drought",
-#                 date_start=datetime.now(),
-#                 date_current=datetime.now(),
-#                 date_end=datetime.now() + time_delta
-#             )
-#             logger.info(f"Drought analytics created for {field_id}")
-#     except Exception as e:
-#         logger.error(f"Drought loss analytics failed for {field_id}: {e}")
-#         traceback.print_exc()
-
-
 def has_high_probability_pest(data: dict) -> bool:
     """Check if AI response has high probability pest detection"""
     try:
@@ -148,23 +107,6 @@ def has_high_probability_pest(data: dict) -> bool:
         pass
     return False
 
-
-# def create_pest_analytics(farm: Farm, ai_response: dict, field_id: str):
-#     """Create pest analytics if conditions are met"""
-#     try:
-#         if has_high_probability_pest(ai_response.get("advisory", {})):
-#             time_delta = timedelta(days=3)
-#             CropLossAnalytics.objects.create(
-#                 farm=farm,
-#                 kind="pest",
-#                 date_start=datetime.now(),
-#                 date_current=datetime.now(),
-#                 date_end=datetime.now() + time_delta
-#             )
-#             logger.info(f"Pest analytics created for {field_id}")
-#     except Exception as e:
-#         logger.error(f"Pest loss analytics failed for {field_id}: {e}")
-#         traceback.print_exc()
 
 def create_flood_analytics(farm: Farm, weather_response: dict, field_id: str, last_day_sensed: datetime):
     """Create or update flood analytics if conditions are met"""
@@ -296,9 +238,18 @@ def create_pest_analytics(farm: Farm, ai_response: dict, field_id: str, last_day
         logger.error(f"Pest loss analytics failed for {field_id}: {e}")
         traceback.print_exc()
 
+
 async def update_all_data(farm: Farm, field_id: str, crop: str, new_sensed_day: str):
     """Update all farm data when there's a new sensed day"""
     logger.info(f"New sensed day detected for {field_id}: {new_sensed_day}")
+    
+    # Parse the sensed day to datetime
+    try:
+        # Assuming format is YYYY-MM-DD
+        last_day_sensed_dt = datetime.strptime(new_sensed_day, "%Y-%m-%d")
+    except ValueError:
+        logger.warning(f"Could not parse sensed day {new_sensed_day}, using current datetime")
+        last_day_sensed_dt = datetime.now()
     
     # Run all async tasks concurrently
     results = await asyncio.gather(
@@ -314,10 +265,10 @@ async def update_all_data(farm: Farm, field_id: str, crop: str, new_sensed_day: 
     ai_response = results[2] if not isinstance(results[2], Exception) else {}
     weather_response = results[3] if not isinstance(results[3], Exception) else {}
     
-    # Create analytics based on the results
-    create_flood_analytics(farm, weather_response, field_id)
-    create_drought_analytics(farm, index_values, field_id)
-    create_pest_analytics(farm, ai_response, field_id)
+    # Create analytics based on the results - NOW WITH last_day_sensed_dt parameter
+    create_flood_analytics(farm, weather_response, field_id, last_day_sensed_dt)
+    create_drought_analytics(farm, index_values, field_id, last_day_sensed_dt)
+    create_pest_analytics(farm, ai_response, field_id, last_day_sensed_dt)
     
     return new_sensed_day
 
@@ -372,9 +323,14 @@ def reload_logic(request, payload: FarmResponseSchema):
             raise HttpError(500, "Failed to update farm")
         
         # Full update with all data
-        final_sensed_day = asyncio.run(
-            update_all_data(farm, field_id, crop, new_sensed_day)
-        )
+        try:
+            final_sensed_day = asyncio.run(
+                update_all_data(farm, field_id, crop, new_sensed_day)
+            )
+        except Exception as e:
+            logger.error(f"Full update failed for {field_id}: {e}")
+            traceback.print_exc()
+            raise HttpError(500, f"Profile update failed: {str(e)}")
         
         logger.info(f"Full profile update completed for {field_id}")
         return {
@@ -385,7 +341,12 @@ def reload_logic(request, payload: FarmResponseSchema):
         }
     else:
         # Only update weather
-        asyncio.run(update_weather_only(field_id))
+        try:
+            asyncio.run(update_weather_only(field_id))
+        except Exception as e:
+            logger.error(f"Weather update failed for {field_id}: {e}")
+            traceback.print_exc()
+            raise HttpError(500, f"Weather update failed: {str(e)}")
         
         logger.info(f"Weather-only update completed for {field_id}")
         return {
