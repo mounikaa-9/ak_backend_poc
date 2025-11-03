@@ -1,11 +1,10 @@
-from ninja import NinjaAPI, Schema
-
 from ninja_extra import NinjaExtraAPI
-from ninja_jwt.authentication import JWTAuth
 from ninja_jwt.controller import NinjaJWTDefaultController
 
 api = NinjaExtraAPI()
 api.register_controllers(NinjaJWTDefaultController)
+
+# Register all routers here
 api.add_router("/users", "users.api.users_router")
 api.add_router("/heatmaps", "heatmaps.api.heatmaps_router")
 api.add_router("/ai_advisory", "ai_advisory.api.ai_advisory_router")
