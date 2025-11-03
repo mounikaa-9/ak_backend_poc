@@ -96,45 +96,45 @@ async def process_weather(field_id: str):
         return {}
 
 
-def create_flood_analytics(farm: Farm, weather_response: dict, field_id: str):
-    """Create flood analytics if conditions are met"""
-    try:
-        if (
-            weather_response
-            and "daily" in weather_response
-            and len(weather_response["daily"]) > 0
-            and float(weather_response["daily"][0].get("rain", -1)) > 75
-        ):
-            time_delta = timedelta(days=3)
-            CropLossAnalytics.objects.create(
-                farm=farm,
-                kind="flood",
-                date_start=datetime.now(),
-                date_current=datetime.now(),
-                date_end=datetime.now() + time_delta
-            )
-            logger.info(f"Flood analytics created for {field_id}")
-    except Exception as e:
-        logger.error(f"Flood loss analytics failed for {field_id}: {e}")
-        traceback.print_exc()
+# def create_flood_analytics(farm: Farm, weather_response: dict, field_id: str):
+#     """Create flood analytics if conditions are met"""
+#     try:
+#         if (
+#             weather_response
+#             and "daily" in weather_response
+#             and len(weather_response["daily"]) > 0
+#             and float(weather_response["daily"][0].get("rain", -1)) > 75
+#         ):
+#             time_delta = timedelta(days=3)
+#             CropLossAnalytics.objects.create(
+#                 farm=farm,
+#                 kind="flood",
+#                 date_start=datetime.now(),
+#                 date_current=datetime.now(),
+#                 date_end=datetime.now() + time_delta
+#             )
+#             logger.info(f"Flood analytics created for {field_id}")
+#     except Exception as e:
+#         logger.error(f"Flood loss analytics failed for {field_id}: {e}")
+#         traceback.print_exc()
 
 
-def create_drought_analytics(farm: Farm, index_values: dict, field_id: str):
-    """Create drought analytics if conditions are met"""
-    try:
-        if float(index_values.get("ndmi", -1)) != -1 and float(index_values["ndmi"]) < 30:
-            time_delta = timedelta(days=30)
-            CropLossAnalytics.objects.create(
-                farm=farm,
-                kind="drought",
-                date_start=datetime.now(),
-                date_current=datetime.now(),
-                date_end=datetime.now() + time_delta
-            )
-            logger.info(f"Drought analytics created for {field_id}")
-    except Exception as e:
-        logger.error(f"Drought loss analytics failed for {field_id}: {e}")
-        traceback.print_exc()
+# def create_drought_analytics(farm: Farm, index_values: dict, field_id: str):
+#     """Create drought analytics if conditions are met"""
+#     try:
+#         if float(index_values.get("ndmi", -1)) != -1 and float(index_values["ndmi"]) < 30:
+#             time_delta = timedelta(days=30)
+#             CropLossAnalytics.objects.create(
+#                 farm=farm,
+#                 kind="drought",
+#                 date_start=datetime.now(),
+#                 date_current=datetime.now(),
+#                 date_end=datetime.now() + time_delta
+#             )
+#             logger.info(f"Drought analytics created for {field_id}")
+#     except Exception as e:
+#         logger.error(f"Drought loss analytics failed for {field_id}: {e}")
+#         traceback.print_exc()
 
 
 def has_high_probability_pest(data: dict) -> bool:
@@ -149,23 +149,152 @@ def has_high_probability_pest(data: dict) -> bool:
     return False
 
 
-def create_pest_analytics(farm: Farm, ai_response: dict, field_id: str):
-    """Create pest analytics if conditions are met"""
+# def create_pest_analytics(farm: Farm, ai_response: dict, field_id: str):
+#     """Create pest analytics if conditions are met"""
+#     try:
+#         if has_high_probability_pest(ai_response.get("advisory", {})):
+#             time_delta = timedelta(days=3)
+#             CropLossAnalytics.objects.create(
+#                 farm=farm,
+#                 kind="pest",
+#                 date_start=datetime.now(),
+#                 date_current=datetime.now(),
+#                 date_end=datetime.now() + time_delta
+#             )
+#             logger.info(f"Pest analytics created for {field_id}")
+#     except Exception as e:
+#         logger.error(f"Pest loss analytics failed for {field_id}: {e}")
+#         traceback.print_exc()
+
+def create_flood_analytics(farm: Farm, weather_response: dict, field_id: str, last_day_sensed: datetime):
+    """Create or update flood analytics if conditions are met"""
+    try:
+        if (
+            weather_response
+            and "daily" in weather_response
+            and len(weather_response["daily"]) > 0
+            and float(weather_response["daily"][0].get("rain", -1)) > 75
+        ):
+            time_delta = timedelta(days=3)
+            date_end = datetime.now() + time_delta
+            
+            # Try to get existing active analytics
+            existing = CropLossAnalytics.objects.filter(
+                farm=farm,
+                kind="flood",
+                is_active=True
+            ).first()
+            
+            if existing:
+                # Update if new last_day_sensed is closer to date_end
+                existing_distance = abs((existing.date_end - existing.closest_date_sensed).total_seconds())
+                new_distance = abs((date_end - last_day_sensed).total_seconds())
+                
+                if new_distance < existing_distance:
+                    existing.closest_date_sensed = last_day_sensed
+                
+                existing.date_current = datetime.now()
+                existing.date_end = date_end
+                existing.save()
+                logger.info(f"Flood analytics updated for {field_id}")
+            else:
+                # Create new analytics
+                CropLossAnalytics.objects.create(
+                    farm=farm,
+                    kind="flood",
+                    date_start=last_day_sensed,
+                    date_current=datetime.now(),
+                    date_end=date_end,
+                    closest_date_sensed=last_day_sensed
+                )
+                logger.info(f"Flood analytics created for {field_id}")
+    except Exception as e:
+        logger.error(f"Flood loss analytics failed for {field_id}: {e}")
+        traceback.print_exc()
+
+
+def create_drought_analytics(farm: Farm, index_values: dict, field_id: str, last_day_sensed: datetime):
+    """Create or update drought analytics if conditions are met"""
+    try:
+        if float(index_values.get("ndmi", -1)) != -1 and float(index_values["ndmi"]) < 30:
+            time_delta = timedelta(days=30)
+            date_end = datetime.now() + time_delta
+            
+            # Try to get existing active analytics
+            existing = CropLossAnalytics.objects.filter(
+                farm=farm,
+                kind="drought",
+                is_active=True
+            ).first()
+            
+            if existing:
+                # Update if new last_day_sensed is closer to date_end
+                existing_distance = abs((existing.date_end - existing.closest_date_sensed).total_seconds())
+                new_distance = abs((date_end - last_day_sensed).total_seconds())
+                
+                if new_distance < existing_distance:
+                    existing.closest_date_sensed = last_day_sensed
+                
+                existing.date_current = datetime.now()
+                existing.date_end = date_end
+                existing.save()
+                logger.info(f"Drought analytics updated for {field_id}")
+            else:
+                # Create new analytics
+                CropLossAnalytics.objects.create(
+                    farm=farm,
+                    kind="drought",
+                    date_start=last_day_sensed,
+                    date_current=datetime.now(),
+                    date_end=date_end,
+                    closest_date_sensed=last_day_sensed
+                )
+                logger.info(f"Drought analytics created for {field_id}")
+    except Exception as e:
+        logger.error(f"Drought loss analytics failed for {field_id}: {e}")
+        traceback.print_exc()
+
+
+def create_pest_analytics(farm: Farm, ai_response: dict, field_id: str, last_day_sensed: datetime):
+    """Create or update pest analytics if conditions are met"""
     try:
         if has_high_probability_pest(ai_response.get("advisory", {})):
             time_delta = timedelta(days=3)
-            CropLossAnalytics.objects.create(
+            date_end = datetime.now() + time_delta
+            
+            # Try to get existing active analytics
+            existing = CropLossAnalytics.objects.filter(
                 farm=farm,
                 kind="pest",
-                date_start=datetime.now(),
-                date_current=datetime.now(),
-                date_end=datetime.now() + time_delta
-            )
-            logger.info(f"Pest analytics created for {field_id}")
+                is_active=True
+            ).first()
+            
+            if existing:
+                # Update if new last_day_sensed is closer to date_end
+                existing_distance = abs((existing.date_end - existing.closest_date_sensed).total_seconds())
+                new_distance = abs((date_end - last_day_sensed).total_seconds())
+                
+                if new_distance < existing_distance:
+                    existing.closest_date_sensed = last_day_sensed
+                
+                existing.date_current = datetime.now()
+                existing.date_end = date_end
+                existing.save()
+                logger.info(f"Pest analytics updated for {field_id}")
+            else:
+                # Create new analytics
+                CropLossAnalytics.objects.create(
+                    farm=farm,
+                    kind="pest",
+                    date_start=last_day_sensed,
+                    date_current=datetime.now(),
+                    date_end=date_end,
+                    closest_date_sensed=last_day_sensed
+                )
+                logger.info(f"Pest analytics created for {field_id}")
     except Exception as e:
         logger.error(f"Pest loss analytics failed for {field_id}: {e}")
         traceback.print_exc()
-
 
 async def update_all_data(farm: Farm, field_id: str, crop: str, new_sensed_day: str):
     """Update all farm data when there's a new sensed day"""

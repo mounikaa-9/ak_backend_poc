@@ -20,7 +20,6 @@ from heatmaps.heatmap_schemas import (
     HeatmapURLSchema
 )
 from heatmaps.time_series_schemas import (
-    IndexTimeSeriesRequestSchema, 
     IndexTimeSeriesResponseSchema, 
     IndexValueDateSchema
 )
@@ -143,39 +142,6 @@ def get_heatmap_url(request, farm_id: str, index_type: str, sensed_date: str):
         "expires_at": (datetime.utcnow() + timedelta(minutes=60)).isoformat() + "Z"
     }
 
-# @heatmaps_router.get(
-#     path="/get_heatmaps",
-#     auth=[JWTAuth(), django_auth],
-#     response=HeatmapSchema
-# )
-# def get_heatmap_url(request, farm_id: str, index_type: str, sensed_date: str):
-#     """Get heatmap URL from storage"""
-#     try:
-#         farm = Farm.objects.get(field_id=farm_id)
-#     except Farm.DoesNotExist:
-#         raise HttpError(400, "farm not found")
-
-#     try:
-#         date_obj = datetime.strptime(sensed_date, "%Y%m%d").date()
-#     except ValueError:
-#         raise HttpError(400, "Invalid date format. Expected YYYYMMDD.")
-
-#     heatmap = Heatmap.objects.filter(
-#         farm=farm,
-#         index_type=index_type,
-#         date=date_obj
-#     ).first()
-
-#     if not heatmap:
-#         raise HttpError(400, "heatmap not found")
-
-#     return {
-#         "farm_id": farm_id,
-#         "index_type": index_type,
-#         "date": date_obj,
-#         "image_url": heatmap.image_url
-#     }
-
 @heatmaps_router.get(
     path="/get_past_satellite_values",
     response=IndexTimeSeriesResponseSchema
@@ -206,4 +172,28 @@ def get_past_satellite_data(request, farm_id : str, index_type : str):
         "farm_id": farm_id,
         "index_type": index_type,
         "data": data
+    }
+    
+@heatmaps_router.get(
+    path="/get_one_past_satellite_value",
+    response=IndexValueDateSchema
+)
+def get_past_satellite_data_for_one_day(request, farm_id : str, index_type : str, date : str):
+    """Return satellite index values (with dates) for the last 30 days"""
+    try:
+        farm = Farm.objects.get(field_id=farm_id)
+    except Farm.DoesNotExist:
+        raise HttpError(400, "farm not found")
+    queryset = (
+        IndexTimeSeries.objects.filter(
+            farm=farm,
+            index_type=index_type,
+            date = date
+        )
+    ).first()
+
+    return {
+        "farm_id": farm_id,
+        "index_type": index_type,
+        "data": queryset.value if queryset.value else None
     }

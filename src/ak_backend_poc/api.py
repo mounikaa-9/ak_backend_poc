@@ -11,8 +11,4 @@ api.add_router("/heatmaps", "heatmaps.api.heatmaps_router")
 api.add_router("/ai_advisory", "ai_advisory.api.ai_advisory_router")
 api.add_router("/weather", "weather.api.weather_router")
 api.add_router("/pipelines", "pipelines.new_profile_script.creation_router")
-
-@api.get("/hello", auth = JWTAuth())
-def hello(request):
-    # print(request)
-    return {"message":"Hello World"}
+api.add_router("/crop_loss_analytics", "crop_loss_analytics.api.crop_loss_analytics_router")
