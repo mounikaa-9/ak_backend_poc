@@ -16,7 +16,8 @@ crop_loss_analytics_router = Router(tags = ["Crop Loss Analytics"])
 
 @crop_loss_analytics_router.get(
     "/crop_loss_analytics",
-    response = CropLossAnalyticsResponseSchema
+    response = CropLossAnalyticsResponseSchema,
+    auth = JWTAuth()
 )
 def get_crop_loss_analytics(request, kind : Literal["flood", "pest", "drought"]):
     
