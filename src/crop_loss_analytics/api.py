@@ -41,6 +41,6 @@ def get_crop_loss_analytics(request, kind : Literal["flood", "pest", "drought"])
     return {
         "kind" : kind,
         "start_date" : None,
-        "end_date" : None
+        "approx_end_date" : None
     }
     
