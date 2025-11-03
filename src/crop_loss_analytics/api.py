@@ -10,7 +10,7 @@ import asyncio
 
 from users.models import Farm
 from crop_loss_analytics.models import CropLossAnalytics
-from crop_loss_analytics_schema import CropLossAnalyticsResponseSchema
+from crop_loss_analytics.crop_loss_analytics_schema import CropLossAnalyticsResponseSchema
 
 crop_loss_analytics_router = Router(tags = ["Crop Loss Analytics"])
 
