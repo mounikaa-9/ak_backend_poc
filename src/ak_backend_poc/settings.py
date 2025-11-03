@@ -27,8 +27,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "0").lower() in ("1", "true", "yes")
 # ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS = ['.vercel.app', 'localhost', '127.0.0.1']
@@ -64,6 +62,40 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+# CORS settings
+CORS_ALLOW_CREDENTIALS = True
+
+if DEBUG:
+    # Allow all for dev/test
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    # Strict for production
+    CORS_ALLOW_ALL_ORIGINS = False
+    CORS_ALLOWED_ORIGINS = [
+        "https://frontend.vercel.app", # add link here
+    ]
+
+
+# CORS_ALLOWED_ORIGINS = [
+#     "https://your-frontend.vercel.app",
+#     "http://localhost:3000",   
+# ]
+
+# Allow all methods
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+]
+
+# Allow all headers
+CORS_ALLOW_HEADERS = [
+    "*",
 ]
 
 ROOT_URLCONF = 'ak_backend_poc.urls'

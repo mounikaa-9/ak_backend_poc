@@ -1,3 +1,4 @@
+import os
 from typing import List
 from datetime import date, timedelta, datetime
 
@@ -8,6 +9,7 @@ from ninja_jwt.authentication import JWTAuth
 from django.contrib.auth.hashers import make_password
 
 import asyncio
+from dotenv import load_dotenv
 
 from azure.storage.blob import BlobServiceClient, generate_blob_sas, BlobSasPermissions
 
@@ -37,6 +39,7 @@ def generate_sas_url(blob_url: str, expiry_minutes: int = 60) -> str:
         Blob URL with SAS token appended
     """
     try:
+        load_dotenv()
         connection_string = os.getenv("AZURE_CONNECTION_STRING")
         
         if not connection_string:
