@@ -194,7 +194,5 @@ def get_past_satellite_data_for_one_day(request, farm_id : str, index_type : str
     ).first()
 
     return {
-        "farm_id": farm_id,
-        "index_type": index_type,
-        "data": queryset.value if queryset.value else None
+        "value": queryset.value if queryset.value else None
     }
