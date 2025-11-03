@@ -63,7 +63,7 @@ def check_if_farm(request):
 def create_new_farm(request, payload: FarmCreateSchema):
     """Create a new farm"""
     try:
-        farm = Farm.objects.get(user=request.user)
+        farm = Farm.objects.filter(user=request.user).first()
         if farm:
             return FarmResponseSchema(
                 field_id=farm.field_id,
