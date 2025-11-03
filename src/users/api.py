@@ -39,10 +39,8 @@ def check_if_farm(request):
     try:
         farm = Farm.objects.get(user=request.user)
     except Farm.DoesNotExist:
-        # When no farm is registered for this user
         raise HttpError(404, "Farm not found for this user.")
     except DatabaseError as e:
-        # Handles issues like DB connection failures or integrity errors
         raise HttpError(500, f"Database error: {str(e)}")
 
     except Exception as e:
