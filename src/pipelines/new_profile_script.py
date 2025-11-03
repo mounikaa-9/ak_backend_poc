@@ -12,6 +12,7 @@ from ninja_jwt.authentication import JWTAuth
 
 import asyncio
 import traceback
+from asgiref.sync import sync_to_async
 
 from utils.az_upload import upload_field_images_to_azure
 from integrations.get_sensed_days import get_sensed_days
@@ -49,7 +50,8 @@ async def process_heatmaps(field_id: str, sensed_day: str):
     try:
         url_files = await get_all_images(field_id=field_id, sensed_day=sensed_day)
         results = upload_field_images_to_azure(field_data=url_files)
-        save_heatmaps_from_response(field_data=results)
+        # Wrap synchronous function in sync_to_async
+        await sync_to_async(save_heatmaps_from_response)(field_data=results)
         logger.info(f"Heatmaps uploaded and saved for {field_id}")
     except Exception as e:
         logger.error(f"Image upload or heatmap save failed for {field_id}: {e}")
@@ -60,7 +62,8 @@ async def process_index_values(field_id: str, sensed_day: str):
     """Fetch and save index values"""
     try:
         index_values = await get_index_values(field_id=field_id, sensed_day=sensed_day)
-        save_index_values_from_response(field_data=index_values)
+        # Wrap synchronous function in sync_to_async
+        await sync_to_async(save_index_values_from_response)(field_data=index_values)
         logger.info(f"Index values saved for {field_id}: {index_values}")
         return index_values
     except Exception as e:
@@ -73,7 +76,8 @@ async def process_ai_advisory(field_id: str, crop: str):
     """Fetch and save AI advisory"""
     try:
         ai_response = await get_ai_advisory(field_id=field_id, crop=crop)
-        save_ai_adviosry_from_response(api_response=ai_response, field_id=field_id)
+        # Wrap synchronous function in sync_to_async
+        await sync_to_async(save_ai_adviosry_from_response)(api_response=ai_response, field_id=field_id)
         logger.info(f"AI advisory saved for {field_id}")
         return ai_response
     except Exception as e:
@@ -87,7 +91,8 @@ async def process_weather(field_id: str):
     try:
         weather_response = await weather_forecast(field_id=field_id)
         weather_response = weather_response.get("weather", {})
-        save_weather_from_response(weather_response)
+        # Wrap synchronous function in sync_to_async
+        await sync_to_async(save_weather_from_response)(weather_response)
         logger.info(f"Weather data saved for {field_id}")
         return weather_response
     except Exception as e:
@@ -243,13 +248,17 @@ async def update_all_data(farm: Farm, field_id: str, crop: str, new_sensed_day: 
     """Update all farm data when there's a new sensed day"""
     logger.info(f"New sensed day detected for {field_id}: {new_sensed_day}")
     
-    # Parse the sensed day to datetime
+    # Parse the sensed day to datetime - handle format YYYYMMDD
     try:
-        # Assuming format is YYYY-MM-DD
-        last_day_sensed_dt = datetime.strptime(new_sensed_day, "%Y-%m-%d")
+        # The format from logs shows: 20251029 (YYYYMMDD without separators)
+        last_day_sensed_dt = datetime.strptime(new_sensed_day, "%Y%m%d")
     except ValueError:
-        logger.warning(f"Could not parse sensed day {new_sensed_day}, using current datetime")
-        last_day_sensed_dt = datetime.now()
+        try:
+            # Fallback to YYYY-MM-DD format
+            last_day_sensed_dt = datetime.strptime(new_sensed_day, "%Y-%m-%d")
+        except ValueError:
+            logger.warning(f"Could not parse sensed day {new_sensed_day}, using current datetime")
+            last_day_sensed_dt = datetime.now()
     
     # Run all async tasks concurrently
     results = await asyncio.gather(
@@ -265,10 +274,10 @@ async def update_all_data(farm: Farm, field_id: str, crop: str, new_sensed_day: 
     ai_response = results[2] if not isinstance(results[2], Exception) else {}
     weather_response = results[3] if not isinstance(results[3], Exception) else {}
     
-    # Create analytics based on the results - NOW WITH last_day_sensed_dt parameter
-    create_flood_analytics(farm, weather_response, field_id, last_day_sensed_dt)
-    create_drought_analytics(farm, index_values, field_id, last_day_sensed_dt)
-    create_pest_analytics(farm, ai_response, field_id, last_day_sensed_dt)
+    # Create analytics based on the results - wrap in sync_to_async
+    await sync_to_async(create_flood_analytics)(farm, weather_response, field_id, last_day_sensed_dt)
+    await sync_to_async(create_drought_analytics)(farm, index_values, field_id, last_day_sensed_dt)
+    await sync_to_async(create_pest_analytics)(farm, ai_response, field_id, last_day_sensed_dt)
     
     return new_sensed_day
 
