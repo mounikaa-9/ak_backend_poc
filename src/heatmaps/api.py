@@ -176,7 +176,7 @@ def get_past_satellite_data(request, farm_id : str, index_type : str):
     
 @heatmaps_router.get(
     path="/get_one_past_satellite_value",
-    response=IndexValueDateSchema
+    response=IndexTimeSeriesResponseSchema
 )
 def get_past_satellite_data_for_one_day(request, farm_id : str, index_type : str, date : str):
     """Return satellite index values (with dates) for the last 30 days"""
