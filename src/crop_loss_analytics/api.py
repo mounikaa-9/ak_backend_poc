@@ -33,8 +33,8 @@ def get_crop_loss_analytics(request, kind : Literal["flood", "pest", "drought"])
     
     if qs:
         return {
-            "start_date" : date(qs.date_start),
-            "approx_end_date" : date(qs.closest_date_sensed),
+            "start_date" : qs.date_start,
+            "approx_end_date" : qs.closest_date_sensed,
             "kind" : kind
         }
     
