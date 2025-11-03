@@ -19,7 +19,9 @@ def save_weather_from_response(weather_data: dict, field_id : str):
     farm = Farm.objects.get(field_id = field_id)
     date_of_reload = datetime.now()
 
-    for i, day in enumerate(weather_data["daily"]):
+    for i, day in enumerate(weather_data.get("weather", {}).get("daily", None)):
+        if day is None:
+            continue
         WeatherPrediction.objects.create(
             farm = farm,
             date_of_reload=date_of_reload,
