@@ -5,9 +5,9 @@ from typing import Dict, List, Optional, Union
 from azure.storage.blob import BlobServiceClient, ContentSettings
 from dotenv import load_dotenv
 
-# ==========================================================
+load_dotenv()
+
 # Logging Configuration
-# ==========================================================
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 handler = logging.StreamHandler()
@@ -34,7 +34,6 @@ def upload_image_to_blob(
     logger.info(f"Uploading image for farm_id={farm_id}, date={date}, type={image_name_type}")
     
     try:
-        load_dotenv()
         connection_string = os.getenv("AZURE_CONNECTION_STRING")
 
         if not connection_string:

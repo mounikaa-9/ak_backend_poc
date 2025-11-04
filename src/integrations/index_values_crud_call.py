@@ -4,6 +4,8 @@ import httpx
 import asyncio
 from dotenv import load_dotenv
 
+load_dotenv()
+
 async def get_index_values(
     field_id : str, 
     sensed_day: str
@@ -26,7 +28,6 @@ async def get_index_values(
         "FieldID" : str(field_id)
     }
     
-    load_dotenv()
     server_response_time = float(os.getenv('SERVER_RESPONSE_TIME'))
     headers_obj = {
         "Authorization": f"Bearer {os.getenv('FARMANOUT_API_KEY')}",

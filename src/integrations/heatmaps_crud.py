@@ -6,12 +6,13 @@ import httpx
 import asyncio
 from dotenv import load_dotenv
 
+load_dotenv()
+
 async def get_field_image(
     field_id : str, 
     sensed_day: str, 
     image_type: str
 ):
-    load_dotenv()
     server_response_time = float(os.getenv('SERVER_RESPONSE_TIME'))
     endpoint_url = "https://us-central1-farmbase-b2f7e.cloudfunctions.net/getFieldImage"
 

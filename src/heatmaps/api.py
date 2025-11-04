@@ -25,6 +25,8 @@ from heatmaps.time_series_schemas import (
     IndexValueDateResponseSchema
 )
 
+load_dotenv()
+
 heatmaps_router = Router(tags = ["heatmaps", "statellite-specific-time-series"])
 
 def generate_sas_url(blob_url: str, expiry_minutes: int = 60) -> str:
@@ -39,7 +41,6 @@ def generate_sas_url(blob_url: str, expiry_minutes: int = 60) -> str:
         Blob URL with SAS token appended
     """
     try:
-        load_dotenv()
         connection_string = os.getenv("AZURE_CONNECTION_STRING")
         
         if not connection_string:

@@ -5,8 +5,9 @@ import httpx
 from time import perf_counter
 from dotenv import load_dotenv
 
+load_dotenv()
+
 async def get_ai_advisory(field_id: str, crop: str):
-    load_dotenv()
     server_response_time = float(os.getenv('SERVER_RESPONSE_TIME', 60.0))
     endpoint_url = "https://us-central1-farmbase-b2f7e.cloudfunctions.net/askJeevnAPI"
 

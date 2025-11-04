@@ -8,11 +8,11 @@ import httpx
 import asyncio
 from dotenv import load_dotenv
 
+load_dotenv()
+
 async def weather_forecast(
     field_id : str,
 ):
-        
-    load_dotenv()
     server_response_time = float(os.getenv('SERVER_RESPONSE_TIME'))
     endpoint_url = "https://us-central1-farmbase-b2f7e.cloudfunctions.net/getPresentWeather"
     

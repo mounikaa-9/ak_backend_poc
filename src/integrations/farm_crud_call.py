@@ -8,6 +8,8 @@ import httpx
 import asyncio
 from dotenv import load_dotenv
 
+load_dotenv()
+
 def latlong_to_longlat(points: List):
     """
     Converts a list of [latitude, longitude] pairs 
@@ -32,7 +34,6 @@ async def add_new_farm(
         "black gram" : 45,
         "green gram" : 64
     }
-    load_dotenv()
     server_response_time = float(os.getenv('SERVER_RESPONSE_TIME'))
     endpoint_url = "https://us-central1-farmbase-b2f7e.cloudfunctions.net/submitField"
 
@@ -105,7 +106,6 @@ async def add_new_farm(
         }
         
 async def edit_field_boundary(field_id : str, points : List):
-    load_dotenv()
     server_response_time = os.getenv('SERVER_RESPONSE_TIME')
     endpoint_url = "https://us-central1-farmbase-b2f7e.cloudfunctions.net/modifyFieldPoints"
 
