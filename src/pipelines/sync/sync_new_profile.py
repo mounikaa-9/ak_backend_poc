@@ -101,7 +101,7 @@ def process_weather(field_id: str) -> Dict[str, Any]:
     try:
         weather_response = asyncio.run(weather_forecast(field_id=field_id))
         weather_response = weather_response.get("weather", {})
-        save_weather_from_response(weather_response)
+        save_weather_from_response(weather_response, field_id)
         logger.info(f"Weather data saved for {field_id}")
         result["success"] = True
         result["data"] = weather_response
