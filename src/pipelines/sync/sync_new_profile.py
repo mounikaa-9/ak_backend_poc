@@ -27,7 +27,8 @@ from heatmaps.utils import save_heatmaps_from_response, save_index_values_from_r
 from ai_advisory.utils import save_ai_adviosry_from_response
 from weather.utils import save_weather_from_response
 from crop_loss_analytics.models import CropLossAnalytics
-from pipelines.new_profile_script import creation_router
+
+sync_creation_router = Router(tags=["Pipeline Sync"])
 
 load_dotenv()
 
@@ -322,7 +323,7 @@ def update_weather_only(field_id: str) -> Dict[str, Any]:
     return {"weather": process_weather(field_id)}
 
 
-@creation_router.post("/sync_create_entire_profile", auth=JWTAuth())
+@sync_creation_router.post("/sync_create_entire_profile", auth=JWTAuth())
 def reload_logic(request, payload: FarmResponseSchema):
     """Synchronous reload logic"""
     user = request.user
