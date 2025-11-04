@@ -10,6 +10,8 @@ from ninja.errors import HttpError
 from ninja.security import django_auth
 from ninja_jwt.authentication import JWTAuth
 
+from dotenv import load_dotenv
+
 import asyncio
 import traceback
 from asgiref.sync import sync_to_async, async_to_sync
@@ -30,6 +32,8 @@ from weather.models import WeatherPrediction
 from weather.utils import save_weather_from_response
 from crop_loss_analytics.models import CropLossAnalytics
 
+load_dotenv()
+
 # Configure logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -43,7 +47,6 @@ if not logger.hasHandlers():
     logger.addHandler(handler)
 
 creation_router = Router(tags=["reload_router"])
-
 
 async def process_heatmaps(field_id: str, sensed_day: str):
     """Process and save heatmaps"""

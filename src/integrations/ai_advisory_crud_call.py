@@ -56,8 +56,8 @@ async def get_ai_advisory(field_id: str, crop: str):
 
 # if __name__ == "__main__":
 #     start_time = perf_counter()
-#     response = asyncio.run(get_ai_advisory(field_id="1761808284616", crop = "rice"))
+#     response = asyncio.run(get_ai_advisory(field_id="1762238407649", crop = "red gram"))
 #     end_time = perf_counter()
 #     print(end_time - start_time)
-#     with open('ai_advisory.json', 'w') as f:
+#     with open('ai_advisory_test.json', 'w') as f:
 #         json.dump(response, f, indent=4)

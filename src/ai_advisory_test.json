@@ -1,0 +1,220 @@
+{
+    "Crop": "red gram",
+    "Satellite_Data": {
+        "green": "86.46%",
+        "orange": "0.00%",
+        "purple": "13.22%",
+        "red": "0.32%",
+        "white": "0.00%"
+    },
+    "SensedDay": "20251103",
+    "SowingDate": "20250706",
+    "advisory": {
+        "Explanation of calculated parameters": {
+            "Fertilizers": "1. Nitrogen (N) levels were estimated at 18.0 kg/acre, slightly below the ideal mid-point of 22.75 kg/acre, indicating a moderate gap. The current NDVI of 0.73 suggests healthy crop growth, but additional N is needed to support pod filling and increase yield. Urea (46% N) is recommended at 11.5 kg/acre, or Farmyard Manure (FYM) (4% N) at 287.5 kg/acre. The assumed nitrogen content in FYM is (11.5/287.5)100 = 4.0%. \n2. Phosphorus (P) levels were estimated at 11.5 kg/acre, below the ideal mid-point of 18.25 kg/acre, indicating a moderate gap. P is crucial for energy transfer and seed development during pod filling. Diammonium Phosphate (DAP) (46% P2O5, equivalent to 20% P) is recommended at 11.0 kg/acre, or Compost (2% P) at 550.0 kg/acre. The assumed phosphorus content in Compost is (11.0/550.0)100 = 2.0%. \n3. Potassium (K) levels were estimated at 109.0 kg/acre, slightly below the ideal mid-point of 145.6 kg/acre, indicating a moderate gap. K supports pod development, disease resistance, and water regulation. Muriate of Potash (MOP) (60% K2O, equivalent to 50% K) is recommended at 39.0 kg/acre, or Wood ash (5% K) at 780.0 kg/acre. The assumed potassium content in Wood ash is (39.0/780.0)100 = 5.0%. \n4. Sulfur (S) levels were estimated at 9.0 kg/acre, slightly below the ideal mid-point of 13.65 kg/acre, indicating a moderate gap. S is essential for protein synthesis and nodule activity in legumes. Gypsum (18% S) is recommended at 10.0 kg/acre, or Farmyard Manure (FYM) (2% S) at 500.0 kg/acre. The assumed sulfur content in FYM is (10.0/500.0)100 = 2.0%. \n5. Zinc (Zn) levels were estimated at 0.4 kg/acre, significantly below the ideal mid-point of 0.7 kg/acre, indicating a high gap. Zn is vital for enzyme activity and hormone production, impacting pod and seed development. Zinc Sulphate (33% Zn) is recommended at 0.8 kg/acre, or Zincated FYM (5% Zn) at 16.0 kg/acre. The assumed zinc content in Zincated FYM is (0.8/16.0)100 = 5.0%. \n\nFlood irrigation allows for easy application of both chemical and organic fertilizers. Chemical fertilizers can be dissolved in irrigation water (fertigation) or broadcast before irrigation. Organic fertilizers should be broadcast and incorporated into the soil before irrigation to facilitate nutrient release. Urea, DAP, MOP, Gypsum, and Zinc Sulphate are water-soluble and can be applied via fertigation. FYM, Compost, Wood ash, and Zincated FYM are slow-release and should be broadcast. The application frequency is every 3 days. \n\nApplication of Urea can temporarily increase soil pH due to ammonia release, but it generally acidifies soil over time. DAP can slightly acidify the soil. MOP is generally neutral but can contribute to salinity. Gypsum can help reduce soil pH in alkaline soils and improve soil structure. Zinc Sulphate is acidic and can lower soil pH. Organic fertilizers generally buffer soil pH, moving it towards neutral.",
+            "Growth and Yield Estimation": "The estimated yield of 480 kg/acre is below the local maximum potential of 600 kg/acre. While NDVI and NDWI indicate healthy crop growth and adequate water, the high criticality of Zinc deficiency and the high probability of Pod borer infestation are significant limiting factors impacting the final yield. Red gram sown on 20250706 with a 5-month maturity period is expected to be ready for harvest around December 2025. The current high NDVI (0.73) on 20251103 indicates active growth, aligning with the crop still maturing. This period also falls within the local probable harvest window of December-February.",
+            "Irrigation": "The red gram crop is in the critical Pod Filling stage, requiring consistent moisture for optimal yield. Daily reference evapotranspiration was estimated at approximately 4.5 mm, representing moderate evaporative demand. The typical baseline recommendation for red gram at this stage is around 4.7 mm. This quantity was adjusted to 5 mm to support pod development, considering the healthy crop status (NDVI 0.73) and adequate moisture (NDWI 0.59). Irrigation is recommended every two days to maintain soil moisture, with 4 events scheduled. No skips due to rain or extreme weather are anticipated as no such data was provided.",
+            "Pest & Disease": "The current NDVI of 0.73 is within the optimal range (0.65-0.85) for red gram at the pod-filling stage, indicating healthy canopy and no immediate widespread stress. However, the pod-filling stage is highly susceptible to pod borers and pod flies, which are locally probable. The NDWI of 0.59 suggests adequate soil moisture, reducing immediate water stress-related disease risks. Sterility mosaic disease, spread by mites, remains a moderate threat given its prevalence in the region, despite healthy canopy. Wilt risk is low due to current healthy indices but is a common soil-borne issue.",
+            "Soil Management": "Soil pH was predicted at 6.8, which is slightly acidic to neutral, based on typical red gram requirements and the semi-arid climate of Vajrakarur. Salinity was predicted as low, considering the NDWI of 0.59 indicating good moisture without excessive accumulation. Flood irrigation, if not managed properly, can lead to waterlogging and nutrient leaching, potentially impacting pH and salinity over time. The application of certain fertilizers, like MOP, can contribute to salinity if not balanced with adequate water management. Acidifying fertilizers like Zinc Sulphate can help lower pH, while organic amendments buffer pH changes. Current 0.25% SOC is very low. It impacts yield, nutrient availability, and water retention. Improve with organic amendments, cover crops, and reduced tillage.",
+            "Weed": "The healthy NDVI (0.73) suggests good canopy closure, which generally suppresses weed growth. The NDWI of 0.59 indicates sufficient soil moisture, which can support weed germination and growth in any open patches. While no specific weed stress is indicated by current indices, the absence of previous advisory data means potential management lapses cannot be ruled out. Common local weeds like Parthenium hysterophorus and Cyperus rotundus can still emerge in inter-row spaces or less dense areas, especially with adequate moisture."
+        },
+        "Fertilizer": {
+            "K": {
+                "application_rate": 39.0,
+                "application_rate_organic": 780.0,
+                "critical": "moderate",
+                "current_soil_composition_kpa": 109.0,
+                "current_soil_composition_ppm": 119.8,
+                "ideal_soil_composition_kpa": "109.2-182.0",
+                "organic_source": "Wood ash",
+                "source_of_K": "Muriate of Potash (MOP)"
+            },
+            "N": {
+                "application_rate": 11.5,
+                "application_rate_organic": 287.5,
+                "critical": "moderate",
+                "current_soil_composition_kpa": 18.0,
+                "current_soil_composition_ppm": 19.8,
+                "ideal_soil_composition_kpa": "18.2-27.3",
+                "organic_source": "Farmyard Manure (FYM)",
+                "source_of_N": "Urea"
+            },
+            "P": {
+                "application_rate": 11.0,
+                "application_rate_organic": 550.0,
+                "critical": "moderate",
+                "current_soil_composition_kpa": 11.5,
+                "current_soil_composition_ppm": 12.6,
+                "ideal_soil_composition_kpa": "13.7-22.8",
+                "organic_source": "Compost",
+                "source_of_P": "Diammonium Phosphate (DAP)"
+            },
+            "S": {
+                "application_rate": 10.0,
+                "application_rate_organic": 500.0,
+                "critical": "moderate",
+                "current_soil_composition_kpa": 9.0,
+                "current_soil_composition_ppm": 9.9,
+                "ideal_soil_composition_kpa": "9.1-18.2",
+                "organic_source": "Farmyard Manure (FYM)",
+                "source_of_S": "Gypsum"
+            },
+            "Zn": {
+                "application_rate": 0.8,
+                "application_rate_organic": 16.0,
+                "critical": "high",
+                "current_soil_composition_kpa": 0.4,
+                "current_soil_composition_ppm": 0.4,
+                "ideal_soil_composition_kpa": "0.5-0.9",
+                "organic_source": "Zincated FYM",
+                "source_of_Zn": "Zinc Sulphate"
+            },
+            "application_rate_units": "kg/acre",
+            "frequency_of_application": 3,
+            "frequency_of_application_units": "days"
+        },
+        "Growth and Yield Estimation": {
+            "expected_harvesting_period": "December 2025",
+            "expected_yield_per_acre": "480",
+            "expected_yield_per_acre_units": "kg/acre",
+            "harvest_status": "incomplete",
+            "potential_yield": {
+                "expected_local_maximum_yield": 600,
+                "expected_local_minimum_yield": 400,
+                "expected_yield_units": "kg/acre"
+            }
+        },
+        "Irrigation": {
+            "20251104": {
+                "evapotranspiration": "moderate",
+                "probability_of_precipitation": "0",
+                "quantity": "5",
+                "rain": "0",
+                "time_range": "06:00-09:00"
+            },
+            "20251105": {
+                "evapotranspiration": "moderate",
+                "probability_of_precipitation": "0",
+                "quantity": "0",
+                "rain": "0",
+                "time_range": "06:00-09:00"
+            },
+            "20251106": {
+                "evapotranspiration": "moderate",
+                "probability_of_precipitation": "0",
+                "quantity": "5",
+                "rain": "0",
+                "time_range": "06:00-09:00"
+            },
+            "20251107": {
+                "evapotranspiration": "moderate",
+                "probability_of_precipitation": "0",
+                "quantity": "0",
+                "rain": "0",
+                "time_range": "06:00-09:00"
+            },
+            "20251108": {
+                "evapotranspiration": "moderate",
+                "probability_of_precipitation": "0",
+                "quantity": "5",
+                "rain": "0",
+                "time_range": "06:00-09:00"
+            },
+            "20251109": {
+                "evapotranspiration": "moderate",
+                "probability_of_precipitation": "0",
+                "quantity": "0",
+                "rain": "0",
+                "time_range": "06:00-09:00"
+            },
+            "20251110": {
+                "evapotranspiration": "moderate",
+                "probability_of_precipitation": "0",
+                "quantity": "5",
+                "rain": "0",
+                "time_range": "06:00-09:00"
+            },
+            "comment": "",
+            "methods": "Flood irrigation",
+            "quantity_units": "mm"
+        },
+        "Pest and Disease": {
+            "potential_diseases": [
+                {
+                    "disease_name": "Sterility mosaic disease (SMD)",
+                    "probability": "moderate",
+                    "solution": {
+                        "chemical": "Acaricide spray",
+                        "organic": "Resistant varieties"
+                    }
+                },
+                {
+                    "disease_name": "Wilt (Fusarium udum)",
+                    "probability": "low",
+                    "solution": {
+                        "chemical": "Carbendazim drench",
+                        "organic": "Trichoderma viride"
+                    }
+                }
+            ],
+            "potential_pests": [
+                {
+                    "pest_name": "Pod borer (Helicoverpa armigera)",
+                    "probability": "high",
+                    "solution": {
+                        "chemical": "Emamectin benzoate",
+                        "organic": "Neem oil spray"
+                    }
+                },
+                {
+                    "pest_name": "Pod fly (Melanagromyza obtusa)",
+                    "probability": "moderate",
+                    "solution": {
+                        "chemical": "Dimethoate spray",
+                        "organic": "Pheromone traps"
+                    }
+                }
+            ]
+        },
+        "References": {
+            "Fertilizer": "Typical nutrient content for Urea (46% N), DAP (20% P, 18% N), MOP (50% K), Gypsum (18% S), Zinc Sulphate (33% Zn). Organic sources: FYM (0.5-1.5% N, 0.2-0.5% P, 0.5-1.5% K, 0.2-0.5% S), Compost (1-3% N, 0.5-2% P, 1-2% K, 0.2-0.5% S), Wood ash (2-10% K, 0.5-2% P). Zincated FYM (2-5% Zn).",
+            "Growth and Yield Estimation": "Yield estimation based on remote sensing indices, soil nutrient analysis, and pest risk assessment for red gram at pod filling stage.",
+            "Irrigation": "ET0 estimated using Hargreaves-style approximation. Kc for red gram at pod filling stage derived from authoritative agronomic guidelines. Irrigation quantity and frequency based on crop water requirements and practical application limits.",
+            "Pest & Disease": "Based on crop phenology, local pest/disease prevalence for red gram in semi-arid regions of India. NDVI/NDWI interpretation for crop health and moisture status. Lack of specific weather data limits precise forecast-based risk assessment.",
+            "Soil Management": "Soil pH and salinity estimations are based on general agronomic principles for red gram in semi-arid regions and the impact of common fertilizers and irrigation practices. 1. ICAR-Indian Institute of Pulses Research (IIPR), Kanpur. 2. FAO. Soil Organic Carbon: The Hidden Potential. 2017.",
+            "Weed": "Based on typical weed pressure in red gram cultivation in India, considering crop stage and general moisture conditions. NDVI/NDWI interpretation for canopy cover and soil moisture."
+        },
+        "Soil Management": {
+            "SOC": "0.25",
+            "pH": 6.8,
+            "salinity": "low"
+        },
+        "Weed": {
+            "potential_weeds": [
+                {
+                    "probability": "moderate",
+                    "solution": {
+                        "chemical": "Atrazine spray",
+                        "organic": "Manual weeding"
+                    },
+                    "weed_name": "Parthenium hysterophorus"
+                },
+                {
+                    "probability": "moderate",
+                    "solution": {
+                        "chemical": "Glyphosate spot",
+                        "organic": "Mulching"
+                    },
+                    "weed_name": "Cyperus rotundus"
+                }
+            ]
+        }
+    },
+    "advisory_generated": "successful",
+    "advisory_type": "weekly",
+    "fieldArea": "7.440 acres",
+    "fieldID": "1762238407649",
+    "fieldName": "G Ramakrishna Farm",
+    "lastSatelliteVisit": "03 November 2025",
+    "timestamp": "1762238555248"
+}
