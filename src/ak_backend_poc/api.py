@@ -19,7 +19,7 @@ def register_routers():
     api.add_router("/weather", "weather.api.weather_router")
     api.add_router("/pipelines", "pipelines.new_profile_script.creation_router")
     api.add_router("/crop_loss_analytics", "crop_loss_analytics.api.crop_loss_analytics_router")
-    
+    api.add_router("/testing", "testing.testing_script.testing_router")
     _routers_registered = True
 
 # Call the function

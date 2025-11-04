@@ -26,7 +26,7 @@ from pipelines.new_profile_script import (
 )
 
 load_dotenv()
-testing_router = Router(tags = ["testing_indi_functions"])
+testing_router = Router(tags = ["testing"])
 
 # Configure logging
 logger = logging.getLogger(__name__)
