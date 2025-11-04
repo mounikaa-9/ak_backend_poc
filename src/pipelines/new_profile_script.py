@@ -93,7 +93,6 @@ async def process_weather(field_id: str):
     """Fetch and save weather forecast"""
     try:
         weather_response = await weather_forecast(field_id=field_id)
-        weather_response = weather_response.get("weather", {})
         # Wrap synchronous function in sync_to_async
         await sync_to_async(save_weather_from_response, thread_sensitive=False)(weather_response, field_id)
         logger.info(f"Weather data saved for {field_id}")

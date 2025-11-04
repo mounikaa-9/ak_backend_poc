@@ -1,4 +1,6 @@
-from datetime import datetime, timezone
+from datetime import datetime
+
+from django.utils import timezone
 
 from users.models import Farm
 from ai_advisory.models import Advisory
