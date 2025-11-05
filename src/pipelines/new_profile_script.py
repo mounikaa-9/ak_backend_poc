@@ -318,9 +318,16 @@ async def async_reload_logic(request, payload: FarmResponseSchema):
         traceback.print_exc()
         raise HttpError(408, "Currently Loading Screens")
 
+    def normalize_to_yyyymmdd(date_value) -> str:
+        """Convert date to YYYYMMDD string format."""
+        if date_value is None:
+            return None
+        
+        return str(date_value).replace('-', '').replace('/', '')[:8]
+    
     # Determine if we need full update or just weather update
     has_new_sensed_day = (current_sensed_day is None or 
-                          str(current_sensed_day) != str(new_sensed_day))
+                      normalize_to_yyyymmdd(current_sensed_day) != normalize_to_yyyymmdd(new_sensed_day))
     
     if has_new_sensed_day:
         # Update farm with new sensed day
