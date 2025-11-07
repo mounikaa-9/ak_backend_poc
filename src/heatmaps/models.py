@@ -47,7 +47,8 @@ class Heatmap(models.Model):
         ('ndmi', 'NDMI'),
         ('evapo', 'ET'),
         ('soc', 'SOC'),
-        ('etci', 'ETCI')
+        ('etci', 'ETCI'),
+        ('hybrid', 'HYBRID')
     ]
     
     farm = models.ForeignKey(Farm, on_delete=models.CASCADE, related_name='heatmaps')
