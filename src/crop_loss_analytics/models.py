@@ -17,5 +17,7 @@ class CropLossAnalytics(models.Model):
     date_current = models.DateField()
     date_end = models.DateField()
     closest_date_sensed = models.DateField()
+    
+    metadata = models.JSONField(default=dict, blank=True)
     class Meta:
         unique_together = ["farm", "kind", "is_active"]

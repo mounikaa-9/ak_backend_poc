@@ -118,45 +118,70 @@ def has_high_probability_pest(data: dict) -> bool:
 def create_flood_analytics(farm: Farm, weather_response: dict, field_id: str, last_day_sensed: datetime):
     """Create or update flood analytics if conditions are met"""
     try:
-        if (
+        is_flood_condition: bool = (
             weather_response
             and "daily" in weather_response
             and len(weather_response["daily"]) > 0
             and float(weather_response["daily"][0].get("rain", -1)) > 75
-        ):
-            time_delta = timedelta(days=3)
-            date_end = datetime.now() + time_delta
+        )
+        
+        existing = CropLossAnalytics.objects.filter(
+            farm=farm,
+            kind="flood",
+            is_active=True
+        ).first()
+        
+        if existing:
+            # Update closest_date_sensed if new one is closer to date_end
+            existing_distance = abs((existing.date_end - existing.closest_date_sensed).total_seconds())
+            new_distance = abs((existing.date_end - last_day_sensed).total_seconds())
             
-            # Try to get existing active analytics
-            existing = CropLossAnalytics.objects.filter(
+            if new_distance < existing_distance:
+                existing.closest_date_sensed = last_day_sensed
+                
+            existing.date_current = datetime.now().date()
+            
+            # If flood is still there, extend the end date
+            if is_flood_condition:
+                time_delta = timedelta(days=3)
+                existing.date_end = (datetime.now() + time_delta).date()
+            # If flood condition is gone for more than 4 days, mark as inactive
+            elif (datetime.now().date() - existing.date_end).days > 4:
+                existing.is_active = False
+            
+            existing.save()
+            logger.info(f"Flood analytics updated for {field_id}")
+            
+        elif is_flood_condition:
+            # Create new analytics
+            previous_heatmap = (
+                Heatmap.objects.filter(
+                    farm=farm,
+                    date__lt=last_day_sensed
+                )
+                .order_by('-date')[1:2] # Get only the second last date
+                .first()
+            )
+            
+            if previous_heatmap:
+                start_date = previous_heatmap.date
+            else:
+                start_date = last_day_sensed.date() if isinstance(last_day_sensed, datetime) else last_day_sensed
+            
+            time_delta = timedelta(days=3)
+            date_end = (datetime.now() + time_delta).date()
+            
+            CropLossAnalytics.objects.create(
                 farm=farm,
                 kind="flood",
+                date_start=start_date,
+                date_current=datetime.now().date(),
+                date_end=date_end,
+                closest_date_sensed=last_day_sensed.date() if isinstance(last_day_sensed, datetime) else last_day_sensed,
                 is_active=True
-            ).first()
+            )
+            logger.info(f"Flood analytics created for {field_id}")
             
-            if existing:
-                # Update if new last_day_sensed is closer to date_end
-                existing_distance = abs((existing.date_end - existing.closest_date_sensed).total_seconds())
-                new_distance = abs((date_end - last_day_sensed).total_seconds())
-                
-                if new_distance < existing_distance:
-                    existing.closest_date_sensed = last_day_sensed
-                
-                existing.date_current = datetime.now()
-                existing.date_end = date_end
-                existing.save()
-                logger.info(f"Flood analytics updated for {field_id}")
-            else:
-                # Create new analytics
-                CropLossAnalytics.objects.create(
-                    farm=farm,
-                    kind="flood",
-                    date_start=last_day_sensed,
-                    date_current=datetime.now(),
-                    date_end=date_end,
-                    closest_date_sensed=last_day_sensed
-                )
-                logger.info(f"Flood analytics created for {field_id}")
     except Exception as e:
         logger.error(f"Flood loss analytics failed for {field_id}: {e}")
         traceback.print_exc()
@@ -165,82 +190,225 @@ def create_flood_analytics(farm: Farm, weather_response: dict, field_id: str, la
 def create_drought_analytics(farm: Farm, index_values: dict, field_id: str, last_day_sensed: datetime):
     """Create or update drought analytics if conditions are met"""
     try:
-        if float(index_values.get("ndmi", -1)) != -1 and float(index_values["ndmi"]) < 30:
-            time_delta = timedelta(days=30)
-            date_end = datetime.now() + time_delta
+        # Check if high drought conditions (NDMI < 30)
+        high_drought_condition = float(index_values.get("ndmi", -1)) != -1 and float(index_values["ndmi"]) < 30
+        
+        existing = CropLossAnalytics.objects.filter(
+            farm=farm,
+            kind="drought",
+            is_active=True
+        ).first()
+        
+        if existing:
+            if high_drought_condition:
+                time_delta = timedelta(days=30)
+                existing.date_end = (datetime.now() + time_delta).date()
+
+            # Update closest_date_sensed if new one is closer to date_end
+            existing_distance = abs((existing.date_end - existing.closest_date_sensed).total_seconds())
+            new_distance = abs((existing.date_end - last_day_sensed).total_seconds())
             
-            # Try to get existing active analytics
-            existing = CropLossAnalytics.objects.filter(
-                farm=farm,
-                kind="drought",
-                is_active=True
-            ).first()
+            if new_distance < existing_distance:
+                existing.closest_date_sensed = last_day_sensed.date() if isinstance(last_day_sensed, datetime) else last_day_sensed
             
-            if existing:
-                # Update if new last_day_sensed is closer to date_end
-                existing_distance = abs((existing.date_end - existing.closest_date_sensed).total_seconds())
-                new_distance = abs((date_end - last_day_sensed).total_seconds())
-                
-                if new_distance < existing_distance:
-                    existing.closest_date_sensed = last_day_sensed
-                
-                existing.date_current = datetime.now()
-                existing.date_end = date_end
-                existing.save()
-                logger.info(f"Drought analytics updated for {field_id}")
+            existing.date_current = datetime.now().date()
+            
+            # Get metadata for tracking consecutive visits
+            metadata = existing.metadata or {}
+            consecutive_drought_visits = metadata.get('consecutive_drought_visits', 0)
+            consecutive_no_drought_visits = metadata.get('consecutive_no_drought_visits', 0)
+            
+            if high_drought_condition:
+                # Reset no-drought counter and increment drought counter
+                consecutive_no_drought_visits = 0
+                consecutive_drought_visits += 1
+
             else:
-                # Create new analytics
+                # Reset drought counter and increment no-drought counter
+                consecutive_drought_visits = 0
+                consecutive_no_drought_visits += 1
+                
+                # If 4 consecutive satellite visits without drought, mark as inactive
+                if consecutive_no_drought_visits >= 4:
+                    existing.is_active = False
+            
+            # Update metadata
+            existing.metadata = {
+                'consecutive_drought_visits': consecutive_drought_visits,
+                'consecutive_no_drought_visits': consecutive_no_drought_visits,
+                'total_satellite_visits': metadata.get('total_satellite_visits', 0) + 1
+            }
+            
+            existing.save()
+            logger.info(f"Drought analytics updated for {field_id}: drought_visits={consecutive_drought_visits}, no_drought_visits={consecutive_no_drought_visits}")
+            
+        elif high_drought_condition:
+            # Check if we have 4 consecutive high drought conditions before creating
+            recent_ndmi_values = IndexTimeSeries.objects.filter(
+                farm=farm,
+                index_type='ndmi',
+                date__lte=last_day_sensed
+            ).order_by('-date')[:4]  # Get last 4 visits
+            
+            consecutive_count = 0
+            for idx_val in recent_ndmi_values:
+                if idx_val.value is not None and float(idx_val.value) < 30:
+                    consecutive_count += 1
+                else:
+                    break
+            
+            # Only create analytics if we have 4 consecutive drought conditions
+            if consecutive_count >= 4:
+                # Get previous heatmap date for start_date
+                previous_heatmap = (
+                    Heatmap.objects.filter(
+                        farm=farm,
+                        date__lt=last_day_sensed
+                    )
+                    .order_by('-date')[1:2] # Get only the second last date
+                    .first()
+                )
+                
+                if previous_heatmap:
+                    start_date = previous_heatmap.date
+                else:
+                    # Use the earliest of the 4 drought visits
+                    if recent_ndmi_values.count() == 4:
+                        start_date = recent_ndmi_values.last().date
+                    else:
+                        start_date = last_day_sensed.date() if isinstance(last_day_sensed, datetime) else last_day_sensed
+                
+                time_delta = timedelta(days=30)
+                date_end = (datetime.now() + time_delta).date()
+                
                 CropLossAnalytics.objects.create(
                     farm=farm,
                     kind="drought",
-                    date_start=last_day_sensed,
-                    date_current=datetime.now(),
+                    date_start=start_date,
+                    date_current=datetime.now().date(),
                     date_end=date_end,
-                    closest_date_sensed=last_day_sensed
+                    closest_date_sensed=last_day_sensed.date() if isinstance(last_day_sensed, datetime) else last_day_sensed,
+                    is_active=True,
+                    metadata={
+                        'consecutive_drought_visits': consecutive_count,
+                        'consecutive_no_drought_visits': 0,
+                        'total_satellite_visits': consecutive_count
+                    }
                 )
-                logger.info(f"Drought analytics created for {field_id}")
+                logger.info(f"Drought analytics created for {field_id} after {consecutive_count} consecutive drought visits")
+            else:
+                logger.info(f"Drought condition detected for {field_id} but only {consecutive_count}/4 consecutive visits - not creating analytics yet")
+                
     except Exception as e:
         logger.error(f"Drought loss analytics failed for {field_id}: {e}")
         traceback.print_exc()
 
-
 def create_pest_analytics(farm: Farm, ai_response: dict, field_id: str, last_day_sensed: datetime):
     """Create or update pest analytics if conditions are met"""
     try:
-        if has_high_probability_pest(ai_response.get("advisory", {})):
-            time_delta = timedelta(days=3)
-            date_end = datetime.now() + time_delta
+        # Check if we have high probability pest condition
+        high_pest_condition = has_high_probability_pest(ai_response.get("advisory", {}))
+        
+        existing = CropLossAnalytics.objects.filter(
+            farm=farm,
+            kind="pest",
+            is_active=True
+        ).first()
+        
+        if existing:
+            if high_pest_condition:
+                time_delta = timedelta(days=3)
+                existing.date_end = (datetime.now() + time_delta).date()
+
+            existing_distance = abs((existing.date_end - existing.closest_date_sensed).total_seconds())
+            new_distance = abs((existing.date_end - last_day_sensed).total_seconds())
             
-            # Try to get existing active analytics
-            existing = CropLossAnalytics.objects.filter(
-                farm=farm,
-                kind="pest",
-                is_active=True
-            ).first()
+            if new_distance < existing_distance:
+                existing.closest_date_sensed = last_day_sensed.date() if isinstance(last_day_sensed, datetime) else last_day_sensed
             
-            if existing:
-                # Update if new last_day_sensed is closer to date_end
-                existing_distance = abs((existing.date_end - existing.closest_date_sensed).total_seconds())
-                new_distance = abs((date_end - last_day_sensed).total_seconds())
-                
-                if new_distance < existing_distance:
-                    existing.closest_date_sensed = last_day_sensed
-                
-                existing.date_current = datetime.now()
-                existing.date_end = date_end
-                existing.save()
-                logger.info(f"Pest analytics updated for {field_id}")
+            existing.date_current = datetime.now().date()
+            
+            # Get metadata for tracking consecutive visits
+            metadata = existing.metadata or {}
+            consecutive_pest_visits = metadata.get('consecutive_pest_visits', 0)
+            consecutive_no_pest_visits = metadata.get('consecutive_no_pest_visits', 0)
+            
+            if high_pest_condition:
+                consecutive_no_pest_visits = 0
+                consecutive_pest_visits += 1
             else:
-                # Create new analytics
+                # Reset pest counter and increment no-pest counter
+                consecutive_pest_visits = 0
+                consecutive_no_pest_visits += 1
+                
+                # If 4 consecutive visits without pest, mark as inactive
+                if consecutive_no_pest_visits >= 4:
+                    existing.is_active = False
+            
+            existing.metadata = {
+                'consecutive_pest_visits': consecutive_pest_visits,
+                'consecutive_no_pest_visits': consecutive_no_pest_visits,
+                'total_visits': metadata.get('total_visits', 0) + 1
+            }
+            
+            existing.save()
+            logger.info(f"Pest analytics updated for {field_id}: pest_visits={consecutive_pest_visits}, no_pest_visits={consecutive_no_pest_visits}")
+            
+        elif high_pest_condition:
+            # Check if we have 4 consecutive high pest conditions before creating
+            recent_advisories = Advisory.objects.filter(
+                farm=farm,
+                sensed_day__lte=last_day_sensed
+            ).order_by('-sensed_day')[:4]  # Get last 4 advisories
+            
+            consecutive_count = 0
+            for advisory in recent_advisories:
+                pest_advisory = advisory.get_pest_disease_advisory()
+                if has_high_probability_pest(pest_advisory.get("advisory", {})):
+                    consecutive_count += 1
+                else:
+                    break
+            
+            if consecutive_count >= 4:
+                previous_advisory = (
+                    Advisory.objects.filter(
+                        farm=farm,
+                        sensed_day__lt=last_day_sensed
+                    )
+                    .order_by('-sensed_day')[1:2]  # Get only the second last date
+                    .first()
+                )
+                
+                if previous_advisory:
+                    start_date = previous_advisory.sensed_day
+                else:
+                    # Use the earliest of the 4 pest visits t-1 date not available
+                    if recent_advisories.count() == 4:
+                        start_date = recent_advisories.last().sensed_day
+                    else:
+                        start_date = last_day_sensed.date() if isinstance(last_day_sensed, datetime) else last_day_sensed
+                
+                time_delta = timedelta(days=3)
+                date_end = (datetime.now() + time_delta).date()
+                
                 CropLossAnalytics.objects.create(
                     farm=farm,
                     kind="pest",
-                    date_start=last_day_sensed,
-                    date_current=datetime.now(),
+                    date_start=start_date,
+                    date_current=datetime.now().date(),
                     date_end=date_end,
-                    closest_date_sensed=last_day_sensed
+                    closest_date_sensed=last_day_sensed.date() if isinstance(last_day_sensed, datetime) else last_day_sensed,
+                    is_active=True,
+                    metadata={
+                        'consecutive_pest_visits': consecutive_count,
+                        'consecutive_no_pest_visits': 0,
+                        'total_visits': consecutive_count
+                    }
                 )
-                logger.info(f"Pest analytics created for {field_id}")
+                logger.info(f"Pest analytics created for {field_id} after {consecutive_count} consecutive pest visits")
+            else:
+                logger.info(f"Pest condition detected for {field_id} but only {consecutive_count}/4 consecutive visits - not creating analytics yet")
+                
     except Exception as e:
         logger.error(f"Pest loss analytics failed for {field_id}: {e}")
         traceback.print_exc()
@@ -271,24 +439,37 @@ async def update_all_data(farm: Farm, field_id: str, crop: str, new_sensed_day: 
         return_exceptions=True
     )
     
-    # Extract results (index_values and ai_response are at indices 1 and 2)
+    # Extract results
     index_values = results[1] if not isinstance(results[1], Exception) else {}
     ai_response = results[2] if not isinstance(results[2], Exception) else {}
     weather_response = results[3] if not isinstance(results[3], Exception) else {}
     
-    # Create analytics based on the results - wrap in sync_to_async
+    # Create analytics, wrap in sync_to_async
     await sync_to_async(create_flood_analytics, thread_sensitive=False)(farm, weather_response, field_id, last_day_sensed_dt)
     await sync_to_async(create_drought_analytics, thread_sensitive=False)(farm, index_values, field_id, last_day_sensed_dt)
     await sync_to_async(create_pest_analytics, thread_sensitive=False)(farm, ai_response, field_id, last_day_sensed_dt)
     
     return new_sensed_day
 
-
-async def update_weather_only(field_id: str):
+async def update_weather_only(farm: Farm, field_id: str, crop: str, last_day_sensed: str):
     """Update only weather data when sensed day hasn't changed"""
     logger.info(f"No new sensed day for {field_id}, updating weather only")
-    await process_weather(field_id)
+    
+    try:
+        last_day_sensed_dt = datetime.strptime(last_day_sensed, "%Y%m%d")
+    except ValueError:
+        try:
+            last_day_sensed_dt = datetime.strptime(last_day_sensed, "%Y-%m-%d")
+        except ValueError:
+            logger.warning(f"Could not parse sensed day {last_day_sensed}, using current datetime")
+            last_day_sensed_dt = datetime.now()
+            
+    weather_response = await process_weather(field_id)
 
+    # Weather analytics is based on everytime rain conditions
+    await sync_to_async(create_flood_analytics, thread_sensitive=False)(
+        farm, weather_response, field_id, last_day_sensed_dt
+    )
 
 async def async_reload_logic(request, payload: FarmResponseSchema):
     """Async version of reload logic"""
@@ -358,7 +539,7 @@ async def async_reload_logic(request, payload: FarmResponseSchema):
     else:
         # Only update weather
         try:
-            await update_weather_only(field_id)
+            await update_weather_only(farm, field_id, crop, new_sensed_day)
         except Exception as e:
             logger.error(f"Weather update failed for {field_id}: {e}")
             traceback.print_exc()
